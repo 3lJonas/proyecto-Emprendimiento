@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grupo 6 · NexTienda · Emprendimiento y Legislación Laboral</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: #24303a;
+    background: #e7eef5;
+  }
+  button, input { font: inherit; color: inherit; }
+  .top {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    min-height: 86px;
+    padding: 12px 26px;
+    background: #fff;
+    border-bottom: 3px solid #004174;
+  }
+  .logo { height: 62px; width: auto; display: block; }
+  .top-copy { margin-left: auto; text-align: right; color: #004174; }
+  .top-copy strong { display: block; font-size: 14px; font-weight: 650; }
+  .top-copy span { display: block; margin-top: 3px; font-size: 12.5px; color: #3e5870; }
+  .shell {
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    overflow: hidden;
+  }
+  .catalog {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-right: 1px solid #d7e0e8;
+  }
+  .group { padding: 18px 22px 12px; border-bottom: 1px solid #e6edf3; }
+  .eyebrow { margin: 0; font-size: 12px; color: #5b6e80; }
+  .group h1 { margin: 4px 0 0; font-size: 28px; line-height: 1; font-weight: 680; letter-spacing: -0.03em; color: #004174; }
+  .sub { margin: 6px 0 0; font-size: 14px; color: #1d3348; }
+  .track { height: 4px; background: #e3ebf2; margin-top: 12px; }
+  .track span { display: block; height: 100%; background: #004174; width: 0; }
+  #list { flex: 1; min-height: 0; overflow: auto; padding: 8px 0; }
+  .step {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 10px;
+    text-align: left;
+    border: 0;
+    background: transparent;
+    padding: 9px 18px;
+    cursor: pointer;
+  }
+  .step:hover .txt strong { color: #004174; }
+  .dot {
+    width: 14px; height: 14px; margin-top: 3px;
+    border: 2px solid #b7c9da; border-radius: 50%; background: #fff;
+    position: relative;
+  }
+  .step:not(:last-child) .dot::after {
+    content: "";
+    position: absolute;
+    left: 5px; top: 14px;
+    width: 2px; height: 28px;
+    background: #d5e0ea;
+  }
+  .step.done .dot { background: #004174; border-color: #004174; }
+  .step.on .dot { box-shadow: 0 0 0 4px #d6e6f4; border-color: #004174; background: #004174; }
+  .step.on { background: #f4f8fb; }
+  .txt strong { display: block; font-size: 14px; font-weight: 640; color: #1c2b38; }
+  .txt small { display: block; margin-top: 2px; color: #6d7d8c; font-size: 12px; }
+  .walk { display: flex; gap: 8px; margin-top: 12px; }
+  .preview, .detail { min-width: 0; }
+  .walk button { border: 1px solid #b7c9da; background: #fff; color: #004174; padding: 10px 8px; cursor: pointer; font-weight: 650; }
+  .walk button.primary { background: #004174; color: #fff; border-color: #004174; }
+  .docs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .docs button { border: 1px solid #c5d4e2; background: #fff; color: #1d3d5c; padding: 6px 9px; cursor: pointer; font-size: 12.5px; }
+  .docs button.on { background: #004174; color: #fff; border-color: #004174; }
+  .hilo { margin: 0 0 8px; color: #004174; font-weight: 650; }
+  .preview { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+  .preview-bar {
+    flex: none;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 18px 26px 8px;
+    background: #fff;
+  }
+  .preview-bar h2 { margin: 0; font-size: 22px; font-weight: 650; letter-spacing: -0.02em; color: #16324a; }
+  .preview-bar p { margin: 5px 0 0; color: #5b6e80; font-size: 13px; }
+  .actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .actions a { text-decoration: none; padding: 9px 14px; font-size: 13.5px; font-weight: 650; }
+  #down { background: #004174; color: #fff; }
+  #open { background: #fff; color: #004174; border: 1px solid #b7c9da; }
+  .detail { flex: none; max-height: 30vh; overflow: auto; background: #fff; padding: 6px 26px 16px; color: #3c4d5e; font-size: 14.5px; line-height: 1.5; border-bottom: 1px solid #e1e9f0; }
+  .detail p { margin: 0; max-width: 68ch; }
+  .stage { flex: 1; min-height: 0; overflow: auto; padding: 28px 24px 72px; }
+  canvas { display: block; margin: 0 auto; background: #fff; box-shadow: 0 10px 30px rgba(16, 42, 72, .12); max-width: 100%; height: auto; }
+  .pager {
+    position: absolute;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #d3dee8;
+    padding: 6px;
+    box-shadow: 0 8px 22px rgba(16, 42, 72, .12);
+    font-size: 13px;
+    color: #24303a;
+  }
+  .preview { position: relative; }
+  .pager button { border: 0; background: #f3f7fb; color: #004174; padding: 7px 12px; cursor: pointer; font-weight: 650; }
+  .pager button:hover { background: #e4eef7; }
+  #pageinfo { min-width: 108px; text-align: center; }
+  .empty { padding: 22px; color: #6d7d8c; }
+  #panel { flex: 1; min-height: 0; overflow: auto; padding: 22px 28px 48px; }
+  #viewer { display: none; flex: 1; min-height: 0; flex-direction: column; position: relative; background: #e7eef5; }
+  #viewer.open { display: flex; }
+  #hidepdf { border: 1px solid #b7c9da; background: #fff; color: #004174; padding: 9px 14px; cursor: pointer; font-weight: 650; }
+  .mod { width: 100%; text-align: left; border: 0; border-bottom: 1px solid #eef3f7; background: #fff; padding: 14px 18px; cursor: pointer; }
+  .mod.on { background: #f2f7fb; box-shadow: inset 3px 0 0 #004174; }
+  .mod strong { display: block; color: #004174; font-size: 12px; }
+  .mod b { display: block; margin-top: 3px; font-size: 15px; font-weight: 650; color: #1c2b38; }
+  .mod small { display: block; margin-top: 3px; color: #6d7d8c; font-size: 12px; line-height: 1.35; }
+  .modtitle { margin: 0 0 8px; color: #004174; font-size: 26px; letter-spacing: -0.02em; }
+  .lead { margin: 0 0 18px; max-width: 72ch; line-height: 1.5; }
+  table.res { width: 100%; border-collapse: collapse; background: #fff; margin: 0 0 22px; }
+  table.res caption { text-align: left; font-weight: 650; color: #16324a; padding: 0 0 8px; }
+  table.res th, table.res td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e6edf3; font-size: 14px; }
+  table.res th { background: #f4f8fb; color: #004174; font-weight: 650; }
+  table.res td.num, table.res th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .doc { background: #fff; border: 1px solid #e1e9f0; padding: 14px 16px; margin: 0 0 10px; }
+  .doc h3 { margin: 0 0 4px; font-size: 16px; color: #16324a; }
+  .doc .when { margin: 0 0 8px; color: #6d7d8c; font-size: 12.5px; }
+  .doc p { margin: 0 0 12px; line-height: 1.45; }
+  .doc .rowbtns { display: flex; gap: 8px; }
+  .doc .ver { background: #004174; color: #fff; border: 0; padding: 8px 12px; cursor: pointer; font-weight: 650; }
+  .doc a { color: #004174; align-self: center; font-weight: 650; font-size: 13.5px; }
+  @media (max-width: 900px) {
+    body { overflow: auto; }
+    .top { align-items: flex-start; }
+    .top-copy { text-align: left; margin-left: 0; }
+    .shell { grid-template-columns: 1fr; }
+    #list { max-height: 48vh; }
+    .preview { min-height: 100vh; }
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo" src="img/uta-logo.png" alt="Universidad Técnica de Ambato">
+  <div class="top-copy">
+    <strong>Facultad de Ingeniería en Sistemas, Electrónica e Industrial</strong>
+    <span>Carrera de Software · Octavo A · Ing. María Francisca Cazorla Logroño, Mg.</span>
+  </div>
+</header>
+<div class="shell">
+  <aside class="catalog">
+    <div class="group">
+      <p class="eyebrow">Dashboard integrador · Grupo 6</p>
+      <h1>NexTienda</h1>
+      <p class="sub">Johan Borja, Jonathan Lozada y Marco Serrano. Se muestran los resultados ya entregados.</p>
+    </div>
+    <nav id="list"></nav>
+  </aside>
+  <section class="preview">
+    <div id="panel"></div>
+    <div id="viewer">
+      <div class="preview-bar">
+        <div>
+          <h2 id="ptitle">Documento</h2>
+          <p id="pmeta"></p>
+        </div>
+        <div class="actions">
+          <button type="button" id="hidepdf">Volver al resumen</button>
+          <a id="down" href="#" download>Descargar PDF</a>
+        </div>
+      </div>
+      <div class="stage"><canvas id="sheet"></canvas></div>
+      <div class="pager">
+        <button type="button" id="prev">Anterior</button>
+        <span id="pageinfo">Página 1</span>
+        <button type="button" id="next">Siguiente</button>
+      </div>
+    </div>
+  </section>
+</div>
+<script src="vendor/pdf.min.js"></script>
+<script>
+const works = [
+  { id:"idea", parcial:"p1", file:"trabajos/taller-problema-oportunidad.pdf", title:"De un problema a una oportunidad", when:"Unidad 1 · grupal", pages:"2 páginas",
+    summary:"El grupo partió de tres problemas de los pequeños negocios y eligió uno: no saben cuánto ganan porque mezclan gastos personales y del negocio. La respuesta fue una aplicación móvil que muestre ganancias con reportes y gráficos. Integrantes: Johan Borja, Jonathan Lozada y Marco Serrano." },
+  { id:"ficha", parcial:"p1", file:"trabajos/ficha-perfil-estrategico.pdf", title:"Ficha de perfil estratégico", when:"Unidad 1 · plantilla", pages:"4 páginas",
+    summary:"Plantilla de identidad, logotipo, misión, visión, FODA y estrategias. Este PDF quedó en blanco. El perfil desarrollado —nombre NexTienda, misión, visión y FODA— está dentro del PEA N.° 1." },
+  { id:"canvas", parcial:"p1", file:"trabajos/business-model-canvas.pdf", title:"Business Model Canvas", when:"18 de agosto de 2026 · grupal", pages:"1 página",
+    summary:"Lienzo de NexTienda para propietarios de tiendas de barrio: separar finanzas personales y del negocio, controlar inventario y ver la ganancia real. Canales: Google Play, App Store, marketing digital y venta directa. Socios: tiendas de aplicaciones, AWS o Azure, asociaciones locales y FISEI." },
+  { id:"mercado", parcial:"p1", file:"trabajos/taller-mercado-operacion.pdf", title:"Mercado y operación", when:"25 de agosto de 2026 · grupal", pages:"2 páginas",
+    summary:"Cliente: dueños de tiendas en Ambato y Tungurahua. Competidores: Treinta y Kyte. La diferencia es el módulo que separa el dinero personal del negocio y un soporte cercano. Oferta freemium. El reto que señalan es lograr que el tendero use la app todos los días." },
+  { id:"via", parcial:"p1", file:"trabajos/viabilidad-financiera.pdf", title:"Viabilidad financiera del plan", when:"Tarea 05 · grupal", pages:"1 página",
+    summary:"Inversión inicial USD 1.080. Costos fijos USD 65, variables USD 80 y talento humano USD 500 al mes. Precio USD 8. Con 100 clientes: ingresos USD 800, resultado USD 155 (margen 19,4 %) y recuperación simple en 7 meses. Equipo: Johan Borja, Jonathan Lozada y Marco Serrano." },
+  { id:"pea1", parcial:"p1", file:"trabajos/pea-1-plan-de-negocios.pdf", title:"PEA N.° 1 · Plan de negocios", when:"Informe de guía · 16 páginas", pages:"Octavo A",
+    summary:"Reúne la Unidad 1: problema, cliente, solución, marca NexTienda, perfil estratégico, Canvas, mercado, operación y estudio económico. En anexos hay un sondeo ilustrativo a 30 propietarios y la comparación con Alegra y Siigo Contífico." },
+  { id:"ruc", parcial:"p1", file:"trabajos/taller-ruc-formalizacion.pdf", title:"RUC y formalización", when:"1 de septiembre de 2026 · Jonathan Lozada", pages:"8 páginas",
+    summary:"Simulación de persona natural en régimen RIMPE, domicilio en Atahualpa, Ambato. CIIU: J6312.00 portales, J6201.01 software y J6311.01 hospedaje. Consultó CONECEL, Megadatos, IBM, Corporación Favorita y PRONACA. Las dos últimas páginas, forma jurídica y conclusión, quedaron sin llenar." },
+  { id:"fact", parcial:"p1", file:"trabajos/practica-facturador-sri.pdf", title:"Práctica en el facturador del SRI", when:"2 de septiembre de 2026", pages:"3 páginas",
+    summary:"Capturas del facturador electrónico de la práctica. El detalle es NEXTIENDA - SOPORTE: 8 unidades a USD 500, subtotal USD 4.000, IVA 15 % USD 600 y total USD 4.600. Es un ejercicio de aula, no una factura de la empresa." },
+  { id:"iva", parcial:"p1", file:"trabajos/tarea-08-documentos-iva.pdf", title:"Documentos comerciales e IVA", when:"8 de septiembre de 2026 · Jonathan Lozada", pages:"11 páginas",
+    summary:"Caso didáctico INDUMETAL, IVA 15 %. Llenó la factura de 50 láminas (USD 2.415), la de 4 estanterías (USD 828), la retención del 1 % (USD 21), la guía de remisión, la nota de crédito (USD 207) y la nota de débito por flete (USD 34,50). La nota de venta y la liquidación final no tienen respuestas." },
+  { id:"sri", parcial:"p1", file:"trabajos/sri-servicios-en-linea.pdf", title:"Declaración de IVA en el SRI en línea", when:"9 de septiembre de 2026", pages:"5 páginas",
+    summary:"Formulario de IVA de agosto de 2026, declaración sustitutiva, dentro de la práctica de cátedra. Ventas gravadas USD 720 e IVA generado USD 108. Hay un activo fijo importado de USD 4.300. El impuesto a pagar que muestra la pantalla es USD 0,00." },
+  { id:"imp", parcial:"p1", file:"trabajos/importacion-tecnologia.pdf", title:"Importación de tecnología en Ecuador", when:"Contexto de la Unidad 2", pages:"1 página",
+    summary:"Infografía enero–diciembre 2025. Importaciones tecnológicas: USD 22.686 millones. China 31,9 % (USD 7.655 millones), Estados Unidos 12,4 % (USD 2.743 millones), México 2,4 %, Canadá 2,0 % y Corea del Sur 1,4 %. Destacan teléfonos, computadoras y semiconductores." },
+  { id:"marca", parcial:"p1", file:"trabajos/tarea-10-registro-marca.pdf", title:"Registro de marca y gamificación", when:"15 de septiembre de 2026 · grupal", pages:"5 páginas",
+    summary:"Simulación de la marca mixta NexTienda, sin trámite ante el SENADI. Compararon Alegra, Siigo Contífico y QuickBooks. La clasificaron en la clase 42 de Niza y anotan que una app descargable también podría ir a la clase 9. Representante simulado: Marco Serrano. El PDF incluye el enlace de Wordwall." },
+  { id:"pea2", parcial:"p1", file:"trabajos/pea-2-obligaciones-tributarias.pdf", title:"PEA N.° 2 · Obligaciones tributarias", when:"Informe de guía · 15 páginas", pages:"Cierre de la Unidad 2",
+    summary:"Consolida NexTienda S.A.S., CIIU, comprobantes, IVA y marca. Ventas nacionales netas USD 610, IVA generado USD 91,50, crédito tributario USD 180 y saldo a favor USD 88,50. Trata la exportación de servicios a tarifa 0 % y concluye que la clase 42 encaja con un modelo SaaS." },
+  { id:"t12", parcial:"p2", file:"trabajos/tarea-12-contratacion.pdf", title:"Contratación de personal", when:"22 de septiembre de 2026 · Jonathan Lozada", pages:"7 páginas",
+    summary:"Simulación para contratar un desarrollador de NexTienda: 40 horas, teletrabajo en Ambato, sueldo USD 800, ingreso supuesto el 23 de septiembre de 2026. Aporte patronal IESS 11,15 % = USD 89,20. También calcula aporte personal USD 75,60, décimo tercero USD 66,67, décimo cuarto USD 40,17 y vacaciones USD 33,33. Fondos de reserva desde el segundo año." },
+  { id:"modos", parcial:"p2", file:"trabajos/modos-produccion-contratos.pdf", title:"Modos de producción y contratos", when:"7 de octubre de 2026", pages:"7 páginas",
+    summary:"Compara comunidad primitiva, esclavismo, feudalismo y capitalismo, y muestra contratos del Ministerio del Trabajo. Revisa un contrato ficticio de Novandes con jornada excesiva, vacaciones a los dos años e IESS después del periodo de prueba, más tres casos con el Código del Trabajo, la LOSEP y el régimen académico. Salario básico 2026: USD 482." },
+  { id:"pitch", parcial:"p2", file:"trabajos/pitch-derechos-laborales.pdf", title:"Pitch · caso real de derechos laborales", when:"Caso OSCUS · Ambato", pages:"1 página",
+    summary:"Sandoval Cevallos contra OSCUS por horas suplementarias, subsistencias y movilización. Proceso 18371-2021-00139. El 25 de abril de 2023 se ordenó pagar USD 48.020,68 más USD 425 al Estado. Desglose: capital USD 26.435,27, intereses USD 20.295,65 y honorarios USD 1.289,76. El 7 de junio de 2023 se archivó por pago cumplido." },
+  { id:"plantilla3", parcial:"p2", file:"trabajos/plantilla-pea3-contratacion.pdf", title:"Plantilla PEA N.° 3 · deberes y derechos", when:"20 de octubre de 2026 · grupal", pages:"5 páginas",
+    summary:"Siete vinculaciones: ocasional de Movilidad Rutas de Riobamba (USD 675), profesora ocasional UTA (USD 2.000), contadora de la gasolinera politécnica, encargo de gerencia, reclasificación en Educación (de USD 733 a USD 1.676), guardaparque y un séptimo documento. Si el papel no lo dice, escriben «No consta»." },
+  { id:"pae3", parcial:"p2", file:"trabajos/pae-3-contratacion.pdf", title:"PAE N.° 3 · Contratación laboral", when:"Informe de guía · 20 páginas", pages:"Unidad 3",
+    summary:"Adjunta la plantilla, el organigrama de NexTienda S.A.S. y una calculadora de remuneraciones. Propuesta de 11 personas en 10 cargos, entre ellos gerente USD 1.000, dos desarrolladores USD 900, soporte USD 650 y ciberseguridad USD 850. La plataforma mostraba 10 trabajadores. Herramienta: nextienda.duckdns.org." },
+  { id:"hack", parcial:"p2", file:"trabajos/laboral-hack.pdf", title:"Laboral Hack", when:"10 de noviembre de 2026", pages:"5 páginas",
+    summary:"Gincana de legislación laboral. El Grupo 6 obtuvo 100/100 en 4 minutos 54 segundos, con las 20 preguntas correctas. Johan Borja también aparece con 100/100 en 8 minutos 15 segundos. El PDF incluye el enlace del Kahoot de código laboral." },
+  { id:"calc", parcial:"p2", file:"trabajos/calculadora-10-casos.pdf", title:"Calculadora de 10 casos", when:"Liquidación de haberes", pages:"11 páginas",
+    summary:"Capturas de la aplicación de liquidación: renuncia, despido intempestivo, visto bueno, embarazo, discapacidad, enfermedad profesional y terminación antes del plazo. Los dos PDF que enviaste eran el mismo archivo; aquí hay una sola copia." },
+  { id:"ape4", parcial:"p2", file:"trabajos/ape-4-paz-y-salvo.pdf", title:"APE N.° 4 · Despidos y paz y salvo", when:"Noviembre de 2026 · 10 páginas", pages:"Unidad 4",
+    summary:"Despido intempestivo ficticio en Industrias Andinas del Tungurahua. Ingreso 4 de marzo de 2022, salida 16 de noviembre de 2026, remuneración USD 950. La app en Python calcula un neto de USD 8.431,87 y un paz y salvo 8/8, expediente PS-2026-0001. Si el art. 185 se cuenta solo por años cumplidos, el neto sería USD 8.265,62." },
+  { id:"grupo", parcial:"g", file:"trabajos/integrantes.pdf", title:"Documento de integrantes", when:"Presentación del grupo", pages:"1 página",
+    summary:"Hoja con Jonathan Lozada, Marco Serrano y el enlace de un video en SharePoint. En las portadas del PEA el grupo también incluye a Johan Josué Borja Guapulema." }
+];
+pdfjsLib.GlobalWorkerOptions.workerSrc = "vendor/pdf.worker.min.js";
+const byId = Object.fromEntries(works.map(w => [w.id, w]));
+const modules = [
+  { id:"e", n:"Módulo 1", title:"Emprendimiento", hint:"Idea, modelo, plan y resultados económicos", docs:["idea","ficha","canvas","mercado","via","pea1"] },
+  { id:"t", n:"Módulo 2", title:"Obligaciones tributarias", hint:"RUC, IVA, cálculos y documentos de clase", docs:["ruc","fact","iva","sri","imp","marca","pea2"] },
+  { id:"n", n:"Módulo 3", title:"Remuneraciones y nómina", hint:"Salarios, beneficios y costo de contratar", docs:["t12","pae3","plantilla3","pitch","modos","hack"] },
+  { id:"l", n:"Módulo 4", title:"Liquidación laboral", hint:"Terminación, cálculos y paz y salvo", docs:["ape4","calc"] }
+];
+const boards = {
+  e: `<p class="lead">NexTienda nace porque el tendero mezcla el dinero de la casa con el de la tienda y no conoce su ganancia real. El grupo pasó de ese problema al nombre, al Canvas, al mercado de Ambato y a un resultado mensual positivo.</p>
+<table class="res"><caption>Estudio económico del plan (Tarea 05)</caption><thead><tr><th>Concepto</th><th class="num">Valor</th></tr></thead><tbody>
+<tr><td>Inversión inicial</td><td class="num">USD 1.080</td></tr>
+<tr><td>Costos fijos mensuales</td><td class="num">USD 65</td></tr>
+<tr><td>Costos variables mensuales</td><td class="num">USD 80</td></tr>
+<tr><td>Talento humano mensual</td><td class="num">USD 500</td></tr>
+<tr><td>Precio de venta</td><td class="num">USD 8</td></tr>
+<tr><td>Clientes al mes</td><td class="num">100</td></tr>
+<tr><td>Ingresos mensuales</td><td class="num">USD 800</td></tr>
+<tr><td>Resultado mensual</td><td class="num">USD 155</td></tr>
+<tr><td>Margen sobre ingresos</td><td class="num">19,4 %</td></tr>
+<tr><td>Recuperación simple</td><td class="num">7 meses</td></tr>
+</tbody></table>
+<table class="res"><caption>Mercado (25 de agosto de 2026)</caption><thead><tr><th></th><th>NexTienda</th><th>Treinta</th><th>Kyte</th></tr></thead><tbody>
+<tr><td>Oferta</td><td>App de finanzas e inventario</td><td>Registro de deudas y ventas</td><td>Punto de venta y catálogo</td></tr>
+<tr><td>Precio</td><td>Freemium, premium entre USD 5 y 8</td><td>Gratuita, con otros servicios</td><td>Freemium, planes de USD 5 a 15</td></tr>
+<tr><td>Diferencia</td><td colspan="3">Separar el dinero personal del negocio y dar soporte local</td></tr>
+</tbody></table>`,
+  t: `<p class="lead">Estos valores están copiados de los talleres y del PEA N.° 2. Son simulaciones de clase, no declaraciones reales de la empresa.</p>
+<table class="res"><caption>Liquidación del IVA en el PEA N.° 2</caption><thead><tr><th>Concepto</th><th class="num">USD</th></tr></thead><tbody>
+<tr><td>Ventas nacionales netas</td><td class="num">610,00</td></tr>
+<tr><td>IVA generado</td><td class="num">91,50</td></tr>
+<tr><td>Crédito tributario</td><td class="num">180,00</td></tr>
+<tr><td>Saldo a favor</td><td class="num">88,50</td></tr>
+</tbody></table>
+<table class="res"><caption>RUC simulado de NexTienda (Jonathan Lozada, 1 de septiembre)</caption><tbody>
+<tr><th>Régimen</th><td>RIMPE</td></tr>
+<tr><th>Tipo</th><td>Persona natural</td></tr>
+<tr><th>Domicilio</th><td>Atahualpa, Ambato, Tungurahua</td></tr>
+<tr><th>CIIU</th><td>J6312.00 portales · J6201.01 software · J6311.01 hospedaje</td></tr>
+</tbody></table>
+<table class="res"><caption>Práctica de factura, 2 de septiembre</caption><tbody>
+<tr><th>Detalle</th><td>NEXTIENDA - SOPORTE, 8 unidades a USD 500</td></tr>
+<tr><th>Subtotal</th><td class="num">USD 4.000</td></tr>
+<tr><th>IVA 15 %</th><td class="num">USD 600</td></tr>
+<tr><th>Total</th><td class="num">USD 4.600</td></tr>
+</tbody></table>
+<table class="res"><caption>Declaración de IVA en pantalla, agosto 2026</caption><tbody>
+<tr><th>Ventas gravadas</th><td class="num">USD 720</td></tr>
+<tr><th>IVA generado</th><td class="num">USD 108</td></tr>
+<tr><th>Impuesto a pagar que muestra el formulario</th><td class="num">USD 0,00</td></tr>
+</tbody></table>`,
+  n: `<p class="lead">El costo de un puesto y la nómina propuesta de NexTienda salen de la Tarea 12 y del PAE N.° 3. No hay un rol de pago nuevo: se muestran las cifras que el grupo ya calculó.</p>
+<table class="res"><caption>Costo mensual de un desarrollador (sueldo USD 800, mes completo)</caption><thead><tr><th>Concepto</th><th class="num">USD</th></tr></thead><tbody>
+<tr><td>Sueldo</td><td class="num">800,00</td></tr>
+<tr><td>Aporte patronal IESS, 11,15 %</td><td class="num">89,20</td></tr>
+<tr><td>Aporte personal, 9,45 %, retenido</td><td class="num">75,60</td></tr>
+<tr><td>Décimo tercero</td><td class="num">66,67</td></tr>
+<tr><td>Décimo cuarto (SBU 482)</td><td class="num">40,17</td></tr>
+<tr><td>Provisión de vacaciones</td><td class="num">33,33</td></tr>
+<tr><td>Fondos de reserva</td><td class="num">desde el segundo año</td></tr>
+</tbody></table>
+<table class="res"><caption>Cargos propuestos en el organigrama (extracto del PAE N.° 3)</caption><thead><tr><th>Cargo</th><th class="num">N.°</th><th class="num">USD / mes</th></tr></thead><tbody>
+<tr><td>Gerente general</td><td class="num">1</td><td class="num">1.000</td></tr>
+<tr><td>Desarrollador de software</td><td class="num">2</td><td class="num">900</td></tr>
+<tr><td>Técnico de implementación y soporte</td><td class="num">1</td><td class="num">650</td></tr>
+<tr><td>Infraestructura y ciberseguridad</td><td class="num">1</td><td class="num">850</td></tr>
+<tr><td>Marketing y ventas</td><td class="num">1</td><td class="num">650</td></tr>
+</tbody></table>
+<p class="lead">La propuesta completa es de 11 personas en 10 cargos. La tabla entera está en el informe. La calculadora de remuneraciones está en nextienda.duckdns.org.</p>
+<table class="res"><caption>Caso OSCUS, proceso 18371-2021-00139</caption><tbody>
+<tr><th>Orden de pago, 25 de abril de 2023</th><td class="num">USD 48.020,68</td></tr>
+<tr><th>Capital</th><td class="num">USD 26.435,27</td></tr>
+<tr><th>Intereses</th><td class="num">USD 20.295,65</td></tr>
+<tr><th>Honorarios</th><td class="num">USD 1.289,76</td></tr>
+<tr><th>Al Estado</th><td class="num">USD 425</td></tr>
+</tbody></table>`,
+  l: `<p class="lead">La liquidación es la del APE N.° 4: despido intempestivo ficticio, sueldo USD 950, ingreso el 4 de marzo de 2022 y salida el 16 de noviembre de 2026. La aplicación en Python emite el paz y salvo y el acta. La calculadora de 10 casos cubre otras formas de terminación.</p>
+<table class="res"><caption>Liquidación del expediente PS-2026-0001</caption><thead><tr><th>Concepto</th><th>Cálculo</th><th class="num">USD</th></tr></thead><tbody>
+<tr><td>Remuneración pendiente</td><td>950 × 16 / 30</td><td class="num">506,67</td></tr>
+<tr><td>Décimo tercero</td><td>950 × 345 / 360</td><td class="num">910,42</td></tr>
+<tr><td>Décimo cuarto (SBU 482)</td><td>482 × 105 / 360</td><td class="num">140,58</td></tr>
+<tr><td>Fondos de reserva</td><td>950 × 252 / 360</td><td class="num">665,00</td></tr>
+<tr><td>Vacaciones proporcionales</td><td>10,50 días</td><td class="num">332,50</td></tr>
+<tr><td>Vacaciones anteriores</td><td>5 días</td><td class="num">158,33</td></tr>
+<tr><td>Indemnización, art. 188</td><td>950 × 5</td><td class="num">4.750,00</td></tr>
+<tr><td>Bonificación, art. 185</td><td>950 × 25 % × 4,70</td><td class="num">1.116,25</td></tr>
+<tr><td>Total de haberes</td><td></td><td class="num">8.579,75</td></tr>
+<tr><td>Aporte IESS 9,45 %</td><td>solo sobre la remuneración pendiente</td><td class="num">47,88</td></tr>
+<tr><td>Anticipo</td><td></td><td class="num">100,00</td></tr>
+<tr><td>Total de deducciones</td><td></td><td class="num">147,88</td></tr>
+<tr><td>Neto a pagar</td><td></td><td class="num">8.431,87</td></tr>
+</tbody></table>`
+};
+let currentMod = "e";
+const list = document.getElementById("list");
+const canvas = document.getElementById("sheet");
+let pdfDoc = null;
+let pageNum = 1;
+let paintToken = 0;
+let renderTask = null;
+async function paint() {
+  if (!pdfDoc) return;
+  const token = ++paintToken;
+  const safePage = Math.min(Math.max(pageNum, 1), pdfDoc.numPages);
+  pageNum = safePage;
+  try {
+    const page = await pdfDoc.getPage(safePage);
+    if (token !== paintToken) return;
+    const stage = canvas.parentElement;
+    const base = page.getViewport({ scale: 1 });
+    const scale = Math.max(0.7, Math.min(1.45, (stage.clientWidth - 36) / base.width));
+    const viewport = page.getViewport({ scale });
+    if (renderTask) renderTask.cancel();
+    const ctx = canvas.getContext("2d");
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    canvas.style.width = "100%";
+    canvas.style.height = "auto";
+    renderTask = page.render({ canvasContext: ctx, viewport });
+    await renderTask.promise;
+    if (token !== paintToken) return;
+    document.getElementById("pageinfo").textContent = "Página " + safePage + " de " + pdfDoc.numPages;
+  } catch (e) {
+    if (e && e.name === "RenderingCancelledException") return;
+    document.getElementById("pageinfo").textContent = "No se pudo mostrar esta página";
+  }
+}
+function docsHtml(ids) {
+  return ids.map(id => {
+    const w = byId[id];
+    return `<article class="doc"><h3>${w.title}</h3><p class="when">${w.when} · ${w.pages}</p><p>${w.summary}</p><div class="rowbtns"><button type="button" class="ver" data-id="${id}">Ver PDF</button><a href="${w.file}" download>Descargar</a></div></article>`;
+  }).join("");
+}
+function showModule(id) {
+  currentMod = id;
+  const m = modules.find(x => x.id === id);
+  document.getElementById("viewer").classList.remove("open");
+  document.getElementById("panel").hidden = false;
+  document.getElementById("panel").innerHTML = `<h2 class="modtitle">${m.n}. ${m.title}</h2><p class="lead">${m.hint}. Los documentos se consultan con el botón Ver PDF.</p>${boards[id]}${docsHtml(m.docs)}`;
+  document.getElementById("panel").querySelectorAll(".ver").forEach(b => b.addEventListener("click", () => showPdf(b.dataset.id)));
+  list.innerHTML = modules.map(x => `<button type="button" class="mod ${x.id === id ? "on" : ""}" data-m="${x.id}"><strong>${x.n}</strong><b>${x.title}</b><small>${x.hint}</small></button>`).join("")
+    + `<button type="button" class="mod" data-m="g"><strong>Anexo</strong><b>Integrantes</b><small>Hoja del grupo y video</small></button>`;
+  list.querySelectorAll(".mod").forEach(b => b.addEventListener("click", () => {
+    if (b.dataset.m === "g") showPdf("grupo");
+    else showModule(b.dataset.m);
+  }));
+}
+function showPdf(id) {
+  const w = byId[id];
+  document.getElementById("panel").hidden = true;
+  document.getElementById("viewer").classList.add("open");
+  document.getElementById("ptitle").textContent = w.title;
+  document.getElementById("pmeta").textContent = w.when + " · " + w.pages;
+  const down = document.getElementById("down");
+  down.href = w.file;
+  down.setAttribute("download", w.file.split("/").pop());
+  pageNum = 1;
+  document.getElementById("pageinfo").textContent = "Cargando…";
+  pdfjsLib.getDocument(w.file).promise.then(doc => { pdfDoc = doc; paint(); }).catch(() => {
+    document.getElementById("pageinfo").textContent = "No se pudo dibujar el PDF. Usa Descargar.";
+  });
+}
+document.getElementById("hidepdf").addEventListener("click", () => showModule(currentMod));
+document.getElementById("prev").addEventListener("click", () => { if (pageNum > 1) { pageNum--; paint(); } });
+document.getElementById("next").addEventListener("click", () => { if (pdfDoc && pageNum < pdfDoc.numPages) { pageNum++; paint(); } });
+showModule("e");
+</script>
+<script>
+const works = [
+  { id:"idea", parcial:"p1", file:"trabajos/taller-problema-oportunidad.pdf", title:"De un problema a una oportunidad", when:"Unidad 1 · grupal", pages:"2 páginas",
+    summary:"El grupo partió de tres problemas de los pequeños negocios y eligió uno: no saben cuánto ganan porque mezclan gastos personales y del negocio. La respuesta fue una aplicación móvil que muestre ganancias con reportes y gráficos. Integrantes: Johan Borja, Jonathan Lozada y Marco Serrano." },
+  { id:"ficha", parcial:"p1", file:"trabajos/ficha-perfil-estrategico.pdf", title:"Ficha de perfil estratégico", when:"Unidad 1 · plantilla", pages:"4 páginas",
+    summary:"Plantilla de identidad, logotipo, misión, visión, FODA y estrategias. Este PDF quedó en blanco. El perfil desarrollado —nombre NexTienda, misión, visión y FODA— está dentro del PEA N.° 1." },
+  { id:"canvas", parcial:"p1", file:"trabajos/business-model-canvas.pdf", title:"Business Model Canvas", when:"18 de agosto de 2026 · grupal", pages:"1 página",
+    summary:"Lienzo de NexTienda para propietarios de tiendas de barrio: separar finanzas personales y del negocio, controlar inventario y ver la ganancia real. Canales: Google Play, App Store, marketing digital y venta directa. Socios: tiendas de aplicaciones, AWS o Azure, asociaciones locales y FISEI." },
+  { id:"mercado", parcial:"p1", file:"trabajos/taller-mercado-operacion.pdf", title:"Mercado y operación", when:"25 de agosto de 2026 · grupal", pages:"2 páginas",
+    summary:"Cliente: dueños de tiendas en Ambato y Tungurahua. Competidores: Treinta y Kyte. La diferencia es el módulo que separa el dinero personal del negocio y un soporte cercano. Oferta freemium. El reto que señalan es lograr que el tendero use la app todos los días." },
+  { id:"via", parcial:"p1", file:"trabajos/viabilidad-financiera.pdf", title:"Viabilidad financiera del plan", when:"Tarea 05 · grupal", pages:"1 página",
+    summary:"Inversión inicial USD 1.080. Costos fijos USD 65, variables USD 80 y talento humano USD 500 al mes. Precio USD 8. Con 100 clientes: ingresos USD 800, resultado USD 155 (margen 19,4 %) y recuperación simple en 7 meses. Equipo: Johan Borja, Jonathan Lozada y Marco Serrano." },
+  { id:"pea1", parcial:"p1", file:"trabajos/pea-1-plan-de-negocios.pdf", title:"PEA N.° 1 · Plan de negocios", when:"Informe de guía · 16 páginas", pages:"Octavo A",
+    summary:"Reúne la Unidad 1: problema, cliente, solución, marca NexTienda, perfil estratégico, Canvas, mercado, operación y estudio económico. En anexos hay un sondeo ilustrativo a 30 propietarios y la comparación con Alegra y Siigo Contífico." },
+  { id:"ruc", parcial:"p1", file:"trabajos/taller-ruc-formalizacion.pdf", title:"RUC y formalización", when:"1 de septiembre de 2026 · Jonathan Lozada", pages:"8 páginas",
+    summary:"Simulación de persona natural en régimen RIMPE, domicilio en Atahualpa, Ambato. CIIU: J6312.00 portales, J6201.01 software y J6311.01 hospedaje. Consultó CONECEL, Megadatos, IBM, Corporación Favorita y PRONACA. Las dos últimas páginas, forma jurídica y conclusión, quedaron sin llenar." },
+  { id:"fact", parcial:"p1", file:"trabajos/practica-facturador-sri.pdf", title:"Práctica en el facturador del SRI", when:"2 de septiembre de 2026", pages:"3 páginas",
+    summary:"Capturas del facturador electrónico de la práctica. El detalle es NEXTIENDA - SOPORTE: 8 unidades a USD 500, subtotal USD 4.000, IVA 15 % USD 600 y total USD 4.600. Es un ejercicio de aula, no una factura de la empresa." },
+  { id:"iva", parcial:"p1", file:"trabajos/tarea-08-documentos-iva.pdf", title:"Documentos comerciales e IVA", when:"8 de septiembre de 2026 · Jonathan Lozada", pages:"11 páginas",
+    summary:"Caso didáctico INDUMETAL, IVA 15 %. Llenó la factura de 50 láminas (USD 2.415), la de 4 estanterías (USD 828), la retención del 1 % (USD 21), la guía de remisión, la nota de crédito (USD 207) y la nota de débito por flete (USD 34,50). La nota de venta y la liquidación final no tienen respuestas." },
+  { id:"sri", parcial:"p1", file:"trabajos/sri-servicios-en-linea.pdf", title:"Declaración de IVA en el SRI en línea", when:"9 de septiembre de 2026", pages:"5 páginas",
+    summary:"Formulario de IVA de agosto de 2026, declaración sustitutiva, dentro de la práctica de cátedra. Ventas gravadas USD 720 e IVA generado USD 108. Hay un activo fijo importado de USD 4.300. El impuesto a pagar que muestra la pantalla es USD 0,00." },
+  { id:"imp", parcial:"p1", file:"trabajos/importacion-tecnologia.pdf", title:"Importación de tecnología en Ecuador", when:"Contexto de la Unidad 2", pages:"1 página",
+    summary:"Infografía enero–diciembre 2025. Importaciones tecnológicas: USD 22.686 millones. China 31,9 % (USD 7.655 millones), Estados Unidos 12,4 % (USD 2.743 millones), México 2,4 %, Canadá 2,0 % y Corea del Sur 1,4 %. Destacan teléfonos, computadoras y semiconductores." },
+  { id:"marca", parcial:"p1", file:"trabajos/tarea-10-registro-marca.pdf", title:"Registro de marca y gamificación", when:"15 de septiembre de 2026 · grupal", pages:"5 páginas",
+    summary:"Simulación de la marca mixta NexTienda, sin trámite ante el SENADI. Compararon Alegra, Siigo Contífico y QuickBooks. La clasificaron en la clase 42 de Niza y anotan que una app descargable también podría ir a la clase 9. Representante simulado: Marco Serrano. El PDF incluye el enlace de Wordwall." },
+  { id:"pea2", parcial:"p1", file:"trabajos/pea-2-obligaciones-tributarias.pdf", title:"PEA N.° 2 · Obligaciones tributarias", when:"Informe de guía · 15 páginas", pages:"Cierre de la Unidad 2",
+    summary:"Consolida NexTienda S.A.S., CIIU, comprobantes, IVA y marca. Ventas nacionales netas USD 610, IVA generado USD 91,50, crédito tributario USD 180 y saldo a favor USD 88,50. Trata la exportación de servicios a tarifa 0 % y concluye que la clase 42 encaja con un modelo SaaS." },
+  { id:"t12", parcial:"p2", file:"trabajos/tarea-12-contratacion.pdf", title:"Contratación de personal", when:"22 de septiembre de 2026 · Jonathan Lozada", pages:"7 páginas",
+    summary:"Simulación para contratar un desarrollador de NexTienda: 40 horas, teletrabajo en Ambato, sueldo USD 800, ingreso supuesto el 23 de septiembre de 2026. Aporte patronal IESS 11,15 % = USD 89,20. También calcula aporte personal USD 75,60, décimo tercero USD 66,67, décimo cuarto USD 40,17 y vacaciones USD 33,33. Fondos de reserva desde el segundo año." },
+  { id:"modos", parcial:"p2", file:"trabajos/modos-produccion-contratos.pdf", title:"Modos de producción y contratos", when:"7 de octubre de 2026", pages:"7 páginas",
+    summary:"Compara comunidad primitiva, esclavismo, feudalismo y capitalismo, y muestra contratos del Ministerio del Trabajo. Revisa un contrato ficticio de Novandes con jornada excesiva, vacaciones a los dos años e IESS después del periodo de prueba, más tres casos con el Código del Trabajo, la LOSEP y el régimen académico. Salario básico 2026: USD 482." },
+  { id:"pitch", parcial:"p2", file:"trabajos/pitch-derechos-laborales.pdf", title:"Pitch · caso real de derechos laborales", when:"Caso OSCUS · Ambato", pages:"1 página",
+    summary:"Sandoval Cevallos contra OSCUS por horas suplementarias, subsistencias y movilización. Proceso 18371-2021-00139. El 25 de abril de 2023 se ordenó pagar USD 48.020,68 más USD 425 al Estado. Desglose: capital USD 26.435,27, intereses USD 20.295,65 y honorarios USD 1.289,76. El 7 de junio de 2023 se archivó por pago cumplido." },
+  { id:"plantilla3", parcial:"p2", file:"trabajos/plantilla-pea3-contratacion.pdf", title:"Plantilla PEA N.° 3 · deberes y derechos", when:"20 de octubre de 2026 · grupal", pages:"5 páginas",
+    summary:"Siete vinculaciones: ocasional de Movilidad Rutas de Riobamba (USD 675), profesora ocasional UTA (USD 2.000), contadora de la gasolinera politécnica, encargo de gerencia, reclasificación en Educación (de USD 733 a USD 1.676), guardaparque y un séptimo documento. Si el papel no lo dice, escriben «No consta»." },
+  { id:"pae3", parcial:"p2", file:"trabajos/pae-3-contratacion.pdf", title:"PAE N.° 3 · Contratación laboral", when:"Informe de guía · 20 páginas", pages:"Unidad 3",
+    summary:"Adjunta la plantilla, el organigrama de NexTienda S.A.S. y una calculadora de remuneraciones. Propuesta de 11 personas en 10 cargos, entre ellos gerente USD 1.000, dos desarrolladores USD 900, soporte USD 650 y ciberseguridad USD 850. La plataforma mostraba 10 trabajadores. Herramienta: nextienda.duckdns.org." },
+  { id:"hack", parcial:"p2", file:"trabajos/laboral-hack.pdf", title:"Laboral Hack", when:"10 de noviembre de 2026", pages:"5 páginas",
+    summary:"Gincana de legislación laboral. El Grupo 6 obtuvo 100/100 en 4 minutos 54 segundos, con las 20 preguntas correctas. Johan Borja también aparece con 100/100 en 8 minutos 15 segundos. El PDF incluye el enlace del Kahoot de código laboral." },
+  { id:"calc", parcial:"p2", file:"trabajos/calculadora-10-casos.pdf", title:"Calculadora de 10 casos", when:"Liquidación de haberes", pages:"11 páginas",
+    summary:"Capturas de la aplicación de liquidación: renuncia, despido intempestivo, visto bueno, embarazo, discapacidad, enfermedad profesional y terminación antes del plazo. Los dos PDF que enviaste eran el mismo archivo; aquí hay una sola copia." },
+  { id:"ape4", parcial:"p2", file:"trabajos/ape-4-paz-y-salvo.pdf", title:"APE N.° 4 · Despidos y paz y salvo", when:"Noviembre de 2026 · 10 páginas", pages:"Unidad 4",
+    summary:"Despido intempestivo ficticio en Industrias Andinas del Tungurahua. Ingreso 4 de marzo de 2022, salida 16 de noviembre de 2026, remuneración USD 950. La app en Python calcula un neto de USD 8.431,87 y un paz y salvo 8/8, expediente PS-2026-0001. Si el art. 185 se cuenta solo por años cumplidos, el neto sería USD 8.265,62." },
+  { id:"grupo", parcial:"g", file:"trabajos/integrantes.pdf", title:"Documento de integrantes", when:"Presentación del grupo", pages:"1 página",
+    summary:"Hoja con Jonathan Lozada, Marco Serrano y el enlace de un video en SharePoint. En las portadas del PEA el grupo también incluye a Johan Josué Borja Guapulema." }
+];
+pdfjsLib.GlobalWorkerOptions.workerSrc = "vendor/pdf.worker.min.js";
+const byId = Object.fromEntries(works.map(w => [w.id, w]));
+const modules = [
+  { id:"e", n:"Módulo 1", title:"Emprendimiento", hint:"Idea, modelo, plan y resultados económicos", docs:["idea","ficha","canvas","mercado","via","pea1"] },
+  { id:"t", n:"Módulo 2", title:"Obligaciones tributarias", hint:"RUC, IVA, cálculos y documentos de clase", docs:["ruc","fact","iva","sri","imp","marca","pea2"] },
+  { id:"n", n:"Módulo 3", title:"Remuneraciones y nómina", hint:"Salarios, beneficios y costo de contratar", docs:["t12","pae3","plantilla3","pitch","modos","hack"] },
+  { id:"l", n:"Módulo 4", title:"Liquidación laboral", hint:"Terminación, cálculos y paz y salvo", docs:["ape4","calc"] }
+];
+const boards = {
+  e: `<p class="lead">NexTienda nace porque el tendero mezcla el dinero de la casa con el de la tienda y no conoce su ganancia real. El grupo pasó de ese problema al nombre, al Canvas, al mercado de Ambato y a un resultado mensual positivo.</p>
+<table class="res"><caption>Estudio económico del plan (Tarea 05)</caption><thead><tr><th>Concepto</th><th class="num">Valor</th></tr></thead><tbody>
+<tr><td>Inversión inicial</td><td class="num">USD 1.080</td></tr>
+<tr><td>Costos fijos mensuales</td><td class="num">USD 65</td></tr>
+<tr><td>Costos variables mensuales</td><td class="num">USD 80</td></tr>
+<tr><td>Talento humano mensual</td><td class="num">USD 500</td></tr>
+<tr><td>Precio de venta</td><td class="num">USD 8</td></tr>
+<tr><td>Clientes al mes</td><td class="num">100</td></tr>
+<tr><td>Ingresos mensuales</td><td class="num">USD 800</td></tr>
+<tr><td>Resultado mensual</td><td class="num">USD 155</td></tr>
+<tr><td>Margen sobre ingresos</td><td class="num">19,4 %</td></tr>
+<tr><td>Recuperación simple</td><td class="num">7 meses</td></tr>
+</tbody></table>
+<table class="res"><caption>Mercado (25 de agosto de 2026)</caption><thead><tr><th></th><th>NexTienda</th><th>Treinta</th><th>Kyte</th></tr></thead><tbody>
+<tr><td>Oferta</td><td>App de finanzas e inventario</td><td>Registro de deudas y ventas</td><td>Punto de venta y catálogo</td></tr>
+<tr><td>Precio</td><td>Freemium, premium entre USD 5 y 8</td><td>Gratuita, con otros servicios</td><td>Freemium, planes de USD 5 a 15</td></tr>
+<tr><td>Diferencia</td><td colspan="3">Separar el dinero personal del negocio y dar soporte local</td></tr>
+</tbody></table>`,
+  t: `<p class="lead">Estos valores están copiados de los talleres y del PEA N.° 2. Son simulaciones de clase, no declaraciones reales de la empresa.</p>
+<table class="res"><caption>Liquidación del IVA en el PEA N.° 2</caption><thead><tr><th>Concepto</th><th class="num">USD</th></tr></thead><tbody>
+<tr><td>Ventas nacionales netas</td><td class="num">610,00</td></tr>
+<tr><td>IVA generado</td><td class="num">91,50</td></tr>
+<tr><td>Crédito tributario</td><td class="num">180,00</td></tr>
+<tr><td>Saldo a favor</td><td class="num">88,50</td></tr>
+</tbody></table>
+<table class="res"><caption>RUC simulado de NexTienda (Jonathan Lozada, 1 de septiembre)</caption><tbody>
+<tr><th>Régimen</th><td>RIMPE</td></tr>
+<tr><th>Tipo</th><td>Persona natural</td></tr>
+<tr><th>Domicilio</th><td>Atahualpa, Ambato, Tungurahua</td></tr>
+<tr><th>CIIU</th><td>J6312.00 portales · J6201.01 software · J6311.01 hospedaje</td></tr>
+</tbody></table>
+<table class="res"><caption>Práctica de factura, 2 de septiembre</caption><tbody>
+<tr><th>Detalle</th><td>NEXTIENDA - SOPORTE, 8 unidades a USD 500</td></tr>
+<tr><th>Subtotal</th><td class="num">USD 4.000</td></tr>
+<tr><th>IVA 15 %</th><td class="num">USD 600</td></tr>
+<tr><th>Total</th><td class="num">USD 4.600</td></tr>
+</tbody></table>
+<table class="res"><caption>Declaración de IVA en pantalla, agosto 2026</caption><tbody>
+<tr><th>Ventas gravadas</th><td class="num">USD 720</td></tr>
+<tr><th>IVA generado</th><td class="num">USD 108</td></tr>
+<tr><th>Impuesto a pagar que muestra el formulario</th><td class="num">USD 0,00</td></tr>
+</tbody></table>`,
+  n: `<p class="lead">El costo de un puesto y la nómina propuesta de NexTienda salen de la Tarea 12 y del PAE N.° 3. No hay un rol de pago nuevo: se muestran las cifras que el grupo ya calculó.</p>
+<table class="res"><caption>Costo mensual de un desarrollador (sueldo USD 800, mes completo)</caption><thead><tr><th>Concepto</th><th class="num">USD</th></tr></thead><tbody>
+<tr><td>Sueldo</td><td class="num">800,00</td></tr>
+<tr><td>Aporte patronal IESS, 11,15 %</td><td class="num">89,20</td></tr>
+<tr><td>Aporte personal, 9,45 %, retenido</td><td class="num">75,60</td></tr>
+<tr><td>Décimo tercero</td><td class="num">66,67</td></tr>
+<tr><td>Décimo cuarto (SBU 482)</td><td class="num">40,17</td></tr>
+<tr><td>Provisión de vacaciones</td><td class="num">33,33</td></tr>
+<tr><td>Fondos de reserva</td><td class="num">desde el segundo año</td></tr>
+</tbody></table>
+<table class="res"><caption>Cargos propuestos en el organigrama (extracto del PAE N.° 3)</caption><thead><tr><th>Cargo</th><th class="num">N.°</th><th class="num">USD / mes</th></tr></thead><tbody>
+<tr><td>Gerente general</td><td class="num">1</td><td class="num">1.000</td></tr>
+<tr><td>Desarrollador de software</td><td class="num">2</td><td class="num">900</td></tr>
+<tr><td>Técnico de implementación y soporte</td><td class="num">1</td><td class="num">650</td></tr>
+<tr><td>Infraestructura y ciberseguridad</td><td class="num">1</td><td class="num">850</td></tr>
+<tr><td>Marketing y ventas</td><td class="num">1</td><td class="num">650</td></tr>
+</tbody></table>
+<p class="lead">La propuesta completa es de 11 personas en 10 cargos. La tabla entera está en el informe. La calculadora de remuneraciones está en nextienda.duckdns.org.</p>
+<table class="res"><caption>Caso OSCUS, proceso 18371-2021-00139</caption><tbody>
+<tr><th>Orden de pago, 25 de abril de 2023</th><td class="num">USD 48.020,68</td></tr>
+<tr><th>Capital</th><td class="num">USD 26.435,27</td></tr>
+<tr><th>Intereses</th><td class="num">USD 20.295,65</td></tr>
+<tr><th>Honorarios</th><td class="num">USD 1.289,76</td></tr>
+<tr><th>Al Estado</th><td class="num">USD 425</td></tr>
+</tbody></table>`,
+  l: `<p class="lead">La liquidación es la del APE N.° 4: despido intempestivo ficticio, sueldo USD 950, ingreso el 4 de marzo de 2022 y salida el 16 de noviembre de 2026. La aplicación en Python emite el paz y salvo y el acta. La calculadora de 10 casos cubre otras formas de terminación.</p>
+<table class="res"><caption>Liquidación del expediente PS-2026-0001</caption><thead><tr><th>Concepto</th><th>Cálculo</th><th class="num">USD</th></tr></thead><tbody>
+<tr><td>Remuneración pendiente</td><td>950 × 16 / 30</td><td class="num">506,67</td></tr>
+<tr><td>Décimo tercero</td><td>950 × 345 / 360</td><td class="num">910,42</td></tr>
+<tr><td>Décimo cuarto (SBU 482)</td><td>482 × 105 / 360</td><td class="num">140,58</td></tr>
+<tr><td>Fondos de reserva</td><td>950 × 252 / 360</td><td class="num">665,00</td></tr>
+<tr><td>Vacaciones proporcionales</td><td>10,50 días</td><td class="num">332,50</td></tr>
+<tr><td>Vacaciones anteriores</td><td>5 días</td><td class="num">158,33</td></tr>
+<tr><td>Indemnización, art. 188</td><td>950 × 5</td><td class="num">4.750,00</td></tr>
+<tr><td>Bonificación, art. 185</td><td>950 × 25 % × 4,70</td><td class="num">1.116,25</td></tr>
+<tr><td>Total de haberes</td><td></td><td class="num">8.579,75</td></tr>
+<tr><td>Aporte IESS 9,45 %</td><td>solo sobre la remuneración pendiente</td><td class="num">47,88</td></tr>
+<tr><td>Anticipo</td><td></td><td class="num">100,00</td></tr>
+<tr><td>Total de deducciones</td><td></td><td class="num">147,88</td></tr>
+<tr><td>Neto a pagar</td><td></td><td class="num">8.431,87</td></tr>
+</tbody></table>`
+};
+let currentMod = "e";
+const list = document.getElementById("list");
+const canvas = document.getElementById("sheet");
+let pdfDoc = null;
+let pageNum = 1;
+let paintToken = 0;
+let renderTask = null;
+async function paint() {
+  if (!pdfDoc) return;
+  const token = ++paintToken;
+  const safePage = Math.min(Math.max(pageNum, 1), pdfDoc.numPages);
+  pageNum = safePage;
+  try {
+    const page = await pdfDoc.getPage(safePage);
+    if (token !== paintToken) return;
+    const stage = canvas.parentElement;
+    const base = page.getViewport({ scale: 1 });
+    const scale = Math.max(0.7, Math.min(1.45, (stage.clientWidth - 36) / base.width));
+    const viewport = page.getViewport({ scale });
+    if (renderTask) renderTask.cancel();
+    const ctx = canvas.getContext("2d");
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    canvas.style.width = "100%";
+    canvas.style.height = "auto";
+    renderTask = page.render({ canvasContext: ctx, viewport });
+    await renderTask.promise;
+    if (token !== paintToken) return;
+    document.getElementById("pageinfo").textContent = "Página " + safePage + " de " + pdfDoc.numPages;
+  } catch (e) {
+    if (e && e.name === "RenderingCancelledException") return;
+    document.getElementById("pageinfo").textContent = "No se pudo mostrar esta página";
+  }
+}
+function renderPath() {
+  list.innerHTML = chapters.map((c, i) => `<button class="step ${i === chapter ? "on" : ""} ${i < chapter ? "done" : ""}" data-i="${i}"><span class="dot"></span><span class="txt"><strong>${i + 1}. ${c.title}</strong><small>${c.when}</small></span></button>`).join("");
+  list.querySelectorAll(".step").forEach(btn => btn.addEventListener("click", () => openChapter(Number(btn.dataset.i))));
+  const btn = list.querySelector(".step.on");
+  if (btn) btn.scrollIntoView({ block: "nearest" });
+}
+function openChapter(i, id) {
+  chapter = Math.min(Math.max(i, 0), chapters.length - 1);
+  const c = chapters[chapter];
+  docId = c.docs.includes(id) ? id : c.docs[0];
+  const w = byId[docId];
+  document.getElementById("progress").textContent = "Paso " + (chapter + 1) + " de " + chapters.length + " · " + c.title;
+  document.getElementById("barfill").style.width = ((chapter + 1) / chapters.length * 100) + "%";
+  document.getElementById("ptitle").textContent = c.title;
+  document.getElementById("pmeta").textContent = c.when + " · " + labels[w.parcial];
+  document.getElementById("hilo").textContent = c.hilo;
+  document.getElementById("psummary").innerHTML = "<p>" + c.relato + "</p><p style=\"margin-top:8px\">" + w.summary + "</p>";
+  document.getElementById("docs").innerHTML = c.docs.map(d => `<button type="button" class="${d === docId ? "on" : ""}" data-d="${d}">${byId[d].title}</button>`).join("");
+  document.getElementById("docs").querySelectorAll("button").forEach(b => b.addEventListener("click", () => openChapter(chapter, b.dataset.d)));
+  document.getElementById("open").href = w.file;
+  const down = document.getElementById("down");
+  down.href = w.file;
+  down.setAttribute("download", w.file.split("/").pop());
+  const forward = document.getElementById("forward");
+  const atEnd = chapter === chapters.length - 1 && docId === c.docs[c.docs.length - 1];
+  forward.textContent = atEnd ? "Fin del recorrido" : "Siguiente paso";
+  pageNum = 1;
+  document.getElementById("pageinfo").textContent = "Cargando…";
+  pdfjsLib.getDocument(w.file).promise.then(doc => { pdfDoc = doc; paint(); }).catch(() => {
+    document.getElementById("pageinfo").textContent = "No se pudo dibujar el PDF. Usa Abrir o Descargar.";
+  });
+  renderPath();
+}
+function move(dir) {
+  const c = chapters[chapter];
+  const at = c.docs.indexOf(docId);
+  const nextAt = at + dir;
+  if (nextAt >= 0 && nextAt < c.docs.length) { openChapter(chapter, c.docs[nextAt]); return; }
+  const ni = chapter + dir;
+  if (ni < 0 || ni >= chapters.length) return;
+  const nc = chapters[ni];
+  openChapter(ni, dir < 0 ? nc.docs[nc.docs.length - 1] : nc.docs[0]);
+}
+document.getElementById("prev").addEventListener("click", () => { if (pageNum > 1) { pageNum--; paint(); } });
+document.getElementById("next").addEventListener("click", () => { if (pdfDoc && pageNum < pdfDoc.numPages) { pageNum++; paint(); } });
+document.getElementById("back").addEventListener("click", () => move(-1));
+document.getElementById("forward").addEventListener("click", () => move(1));
+openChapter(0);
+</script>
+</body>
+</html>
