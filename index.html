@@ -140,6 +140,7 @@
   .mod small { display: block; margin-top: 3px; color: #6d7d8c; font-size: 12px; line-height: 1.35; }
   .modtitle { margin: 0 0 8px; color: #004174; font-size: 26px; letter-spacing: -0.02em; }
   .lead { margin: 0 0 18px; max-width: 72ch; line-height: 1.5; }
+  .lead a, .doc p a { color: #004174; font-weight: 650; text-decoration: underline; }
   table.res { width: 100%; border-collapse: collapse; background: #fff; margin: 0 0 22px; }
   table.res caption { text-align: left; font-weight: 650; color: #16324a; padding: 0 0 8px; }
   table.res th, table.res td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e6edf3; font-size: 14px; }
@@ -239,13 +240,13 @@ const works = [
   { id:"plantilla3", parcial:"p2", file:"trabajos/plantilla-pea3-contratacion.pdf", title:"Plantilla PEA N.° 3 · deberes y derechos", when:"20 de octubre de 2026 · grupal", pages:"5 páginas",
     summary:"Siete vinculaciones: ocasional de Movilidad Rutas de Riobamba (USD 675), profesora ocasional UTA (USD 2.000), contadora de la gasolinera politécnica, encargo de gerencia, reclasificación en Educación (de USD 733 a USD 1.676), guardaparque y un séptimo documento. Si el papel no lo dice, escriben «No consta»." },
   { id:"pae3", parcial:"p2", file:"trabajos/pae-3-contratacion.pdf", title:"PAE N.° 3 · Contratación laboral", when:"Informe de guía · 20 páginas", pages:"Unidad 3",
-    summary:"Adjunta la plantilla, el organigrama de NexTienda S.A.S. y una calculadora de remuneraciones. Propuesta de 11 personas en 10 cargos, entre ellos gerente USD 1.000, dos desarrolladores USD 900, soporte USD 650 y ciberseguridad USD 850. La plataforma mostraba 10 trabajadores. Herramienta: nextienda.duckdns.org." },
+    summary:"Adjunta la plantilla, el organigrama de NexTienda S.A.S. y una calculadora de remuneraciones. Propuesta de 11 personas en 10 cargos, entre ellos gerente USD 1.000, dos desarrolladores USD 900, soporte USD 650 y ciberseguridad USD 850. La plataforma mostraba 10 trabajadores. Herramienta: <a href="https://nextienda.duckdns.org/" target="_blank" rel="noopener">https://nextienda.duckdns.org/</a>." },
   { id:"hack", parcial:"p2", file:"trabajos/laboral-hack.pdf", title:"Laboral Hack", when:"10 de noviembre de 2026", pages:"5 páginas",
     summary:"Gincana de legislación laboral. El Grupo 6 obtuvo 100/100 en 4 minutos 54 segundos, con las 20 preguntas correctas. Johan Borja también aparece con 100/100 en 8 minutos 15 segundos. El PDF incluye el enlace del Kahoot de código laboral." },
   { id:"calc", parcial:"p2", file:"trabajos/calculadora-10-casos.pdf", title:"Calculadora de 10 casos", when:"Liquidación de haberes", pages:"11 páginas",
     summary:"Capturas de la aplicación de liquidación: renuncia, despido intempestivo, visto bueno, embarazo, discapacidad, enfermedad profesional y terminación antes del plazo. Los dos PDF que enviaste eran el mismo archivo; aquí hay una sola copia." },
   { id:"ape4", parcial:"p2", file:"trabajos/ape-4-paz-y-salvo.pdf", title:"APE N.° 4 · Despidos y paz y salvo", when:"Noviembre de 2026 · 10 páginas", pages:"Unidad 4",
-    summary:"Despido intempestivo ficticio en Industrias Andinas del Tungurahua. Ingreso 4 de marzo de 2022, salida 16 de noviembre de 2026, remuneración USD 950. La app en Python calcula un neto de USD 8.431,87 y un paz y salvo 8/8, expediente PS-2026-0001. Si el art. 185 se cuenta solo por años cumplidos, el neto sería USD 8.265,62." },
+    summary:"Despido intempestivo ficticio en Industrias Andinas del Tungurahua. Ingreso 4 de marzo de 2022, salida 16 de noviembre de 2026, remuneración USD 950. La app en Python calcula un neto de USD 8.431,87 y un paz y salvo 8/8, expediente PS-2026-0001. Aplicación de paz y salvo: <a href="http://159.54.155.2:5050/" target="_blank" rel="noopener">http://159.54.155.2:5050/</a>. Si el art. 185 se cuenta solo por años cumplidos, el neto sería USD 8.265,62." },
   { id:"grupo", parcial:"g", file:"trabajos/integrantes.pdf", title:"Documento de integrantes", when:"Presentación del grupo", pages:"1 página",
     summary:"Hoja con Jonathan Lozada, Marco Serrano y el enlace de un video en SharePoint. En las portadas del PEA el grupo también incluye a Johan Josué Borja Guapulema." }
 ];
@@ -317,7 +318,7 @@ const boards = {
 <tr><td>Infraestructura y ciberseguridad</td><td class="num">1</td><td class="num">850</td></tr>
 <tr><td>Marketing y ventas</td><td class="num">1</td><td class="num">650</td></tr>
 </tbody></table>
-<p class="lead">La propuesta completa es de 11 personas en 10 cargos. La tabla entera está en el informe. La calculadora de remuneraciones está en nextienda.duckdns.org.</p>
+<p class="lead">La propuesta completa es de 11 personas en 10 cargos. La tabla entera está en el informe. La calculadora de remuneraciones está en <a href="https://nextienda.duckdns.org/" target="_blank" rel="noopener">https://nextienda.duckdns.org/</a>.</p>
 <table class="res"><caption>Caso OSCUS, proceso 18371-2021-00139</caption><tbody>
 <tr><th>Orden de pago, 25 de abril de 2023</th><td class="num">USD 48.020,68</td></tr>
 <tr><th>Capital</th><td class="num">USD 26.435,27</td></tr>
@@ -325,7 +326,7 @@ const boards = {
 <tr><th>Honorarios</th><td class="num">USD 1.289,76</td></tr>
 <tr><th>Al Estado</th><td class="num">USD 425</td></tr>
 </tbody></table>`,
-  l: `<p class="lead">La liquidación es la del APE N.° 4: despido intempestivo ficticio, sueldo USD 950, ingreso el 4 de marzo de 2022 y salida el 16 de noviembre de 2026. La aplicación en Python emite el paz y salvo y el acta. La calculadora de 10 casos cubre otras formas de terminación.</p>
+  l: `<p class="lead">La liquidación es la del APE N.° 4: despido intempestivo ficticio, sueldo USD 950, ingreso el 4 de marzo de 2022 y salida el 16 de noviembre de 2026. La aplicación en Python emite el paz y salvo y el acta: <a href="http://159.54.155.2:5050/" target="_blank" rel="noopener">http://159.54.155.2:5050/</a>. La calculadora de 10 casos cubre otras formas de terminación.</p>
 <table class="res"><caption>Liquidación del expediente PS-2026-0001</caption><thead><tr><th>Concepto</th><th>Cálculo</th><th class="num">USD</th></tr></thead><tbody>
 <tr><td>Remuneración pendiente</td><td>950 × 16 / 30</td><td class="num">506,67</td></tr>
 <tr><td>Décimo tercero</td><td>950 × 345 / 360</td><td class="num">910,42</td></tr>
@@ -453,13 +454,13 @@ const works = [
   { id:"plantilla3", parcial:"p2", file:"trabajos/plantilla-pea3-contratacion.pdf", title:"Plantilla PEA N.° 3 · deberes y derechos", when:"20 de octubre de 2026 · grupal", pages:"5 páginas",
     summary:"Siete vinculaciones: ocasional de Movilidad Rutas de Riobamba (USD 675), profesora ocasional UTA (USD 2.000), contadora de la gasolinera politécnica, encargo de gerencia, reclasificación en Educación (de USD 733 a USD 1.676), guardaparque y un séptimo documento. Si el papel no lo dice, escriben «No consta»." },
   { id:"pae3", parcial:"p2", file:"trabajos/pae-3-contratacion.pdf", title:"PAE N.° 3 · Contratación laboral", when:"Informe de guía · 20 páginas", pages:"Unidad 3",
-    summary:"Adjunta la plantilla, el organigrama de NexTienda S.A.S. y una calculadora de remuneraciones. Propuesta de 11 personas en 10 cargos, entre ellos gerente USD 1.000, dos desarrolladores USD 900, soporte USD 650 y ciberseguridad USD 850. La plataforma mostraba 10 trabajadores. Herramienta: nextienda.duckdns.org." },
+    summary:"Adjunta la plantilla, el organigrama de NexTienda S.A.S. y una calculadora de remuneraciones. Propuesta de 11 personas en 10 cargos, entre ellos gerente USD 1.000, dos desarrolladores USD 900, soporte USD 650 y ciberseguridad USD 850. La plataforma mostraba 10 trabajadores. Herramienta: <a href="https://nextienda.duckdns.org/" target="_blank" rel="noopener">https://nextienda.duckdns.org/</a>." },
   { id:"hack", parcial:"p2", file:"trabajos/laboral-hack.pdf", title:"Laboral Hack", when:"10 de noviembre de 2026", pages:"5 páginas",
     summary:"Gincana de legislación laboral. El Grupo 6 obtuvo 100/100 en 4 minutos 54 segundos, con las 20 preguntas correctas. Johan Borja también aparece con 100/100 en 8 minutos 15 segundos. El PDF incluye el enlace del Kahoot de código laboral." },
   { id:"calc", parcial:"p2", file:"trabajos/calculadora-10-casos.pdf", title:"Calculadora de 10 casos", when:"Liquidación de haberes", pages:"11 páginas",
     summary:"Capturas de la aplicación de liquidación: renuncia, despido intempestivo, visto bueno, embarazo, discapacidad, enfermedad profesional y terminación antes del plazo. Los dos PDF que enviaste eran el mismo archivo; aquí hay una sola copia." },
   { id:"ape4", parcial:"p2", file:"trabajos/ape-4-paz-y-salvo.pdf", title:"APE N.° 4 · Despidos y paz y salvo", when:"Noviembre de 2026 · 10 páginas", pages:"Unidad 4",
-    summary:"Despido intempestivo ficticio en Industrias Andinas del Tungurahua. Ingreso 4 de marzo de 2022, salida 16 de noviembre de 2026, remuneración USD 950. La app en Python calcula un neto de USD 8.431,87 y un paz y salvo 8/8, expediente PS-2026-0001. Si el art. 185 se cuenta solo por años cumplidos, el neto sería USD 8.265,62." },
+    summary:"Despido intempestivo ficticio en Industrias Andinas del Tungurahua. Ingreso 4 de marzo de 2022, salida 16 de noviembre de 2026, remuneración USD 950. La app en Python calcula un neto de USD 8.431,87 y un paz y salvo 8/8, expediente PS-2026-0001. Aplicación de paz y salvo: <a href="http://159.54.155.2:5050/" target="_blank" rel="noopener">http://159.54.155.2:5050/</a>. Si el art. 185 se cuenta solo por años cumplidos, el neto sería USD 8.265,62." },
   { id:"grupo", parcial:"g", file:"trabajos/integrantes.pdf", title:"Documento de integrantes", when:"Presentación del grupo", pages:"1 página",
     summary:"Hoja con Jonathan Lozada, Marco Serrano y el enlace de un video en SharePoint. En las portadas del PEA el grupo también incluye a Johan Josué Borja Guapulema." }
 ];
@@ -531,7 +532,7 @@ const boards = {
 <tr><td>Infraestructura y ciberseguridad</td><td class="num">1</td><td class="num">850</td></tr>
 <tr><td>Marketing y ventas</td><td class="num">1</td><td class="num">650</td></tr>
 </tbody></table>
-<p class="lead">La propuesta completa es de 11 personas en 10 cargos. La tabla entera está en el informe. La calculadora de remuneraciones está en nextienda.duckdns.org.</p>
+<p class="lead">La propuesta completa es de 11 personas en 10 cargos. La tabla entera está en el informe. La calculadora de remuneraciones está en <a href="https://nextienda.duckdns.org/" target="_blank" rel="noopener">https://nextienda.duckdns.org/</a>.</p>
 <table class="res"><caption>Caso OSCUS, proceso 18371-2021-00139</caption><tbody>
 <tr><th>Orden de pago, 25 de abril de 2023</th><td class="num">USD 48.020,68</td></tr>
 <tr><th>Capital</th><td class="num">USD 26.435,27</td></tr>
@@ -539,7 +540,7 @@ const boards = {
 <tr><th>Honorarios</th><td class="num">USD 1.289,76</td></tr>
 <tr><th>Al Estado</th><td class="num">USD 425</td></tr>
 </tbody></table>`,
-  l: `<p class="lead">La liquidación es la del APE N.° 4: despido intempestivo ficticio, sueldo USD 950, ingreso el 4 de marzo de 2022 y salida el 16 de noviembre de 2026. La aplicación en Python emite el paz y salvo y el acta. La calculadora de 10 casos cubre otras formas de terminación.</p>
+  l: `<p class="lead">La liquidación es la del APE N.° 4: despido intempestivo ficticio, sueldo USD 950, ingreso el 4 de marzo de 2022 y salida el 16 de noviembre de 2026. La aplicación en Python emite el paz y salvo y el acta: <a href="http://159.54.155.2:5050/" target="_blank" rel="noopener">http://159.54.155.2:5050/</a>. La calculadora de 10 casos cubre otras formas de terminación.</p>
 <table class="res"><caption>Liquidación del expediente PS-2026-0001</caption><thead><tr><th>Concepto</th><th>Cálculo</th><th class="num">USD</th></tr></thead><tbody>
 <tr><td>Remuneración pendiente</td><td>950 × 16 / 30</td><td class="num">506,67</td></tr>
 <tr><td>Décimo tercero</td><td>950 × 345 / 360</td><td class="num">910,42</td></tr>
