@@ -4,7 +4,7 @@ Plataforma integradora del **Grupo 6**, emprendimiento **NexTienda**, asignatura
 
 Universidad Técnica de Ambato · FISEI · Carrera de Software · Octavo A.  
 Ciclo julio–diciembre 2026.  
-Docente: Ing. María Francisca Cazorla Logroño, Mg.  
+Docente: Eco. María Francisca Cazorla Logroño, Mg.  
 Integrantes: Johan Josué Borja Guapulema, Jonathan Israel Lozada López y Marco Giovanni Serrano Nuela.
 
 La guía pide reunir los trabajos del semestre en un dashboard de cuatro módulos, ver los resultados y consultar los documentos. No se crearon casos nuevos, ni se volvieron a calcular liquidaciones, ni se hizo otra automatización. Solo se organizó lo que el grupo ya había entregado.
